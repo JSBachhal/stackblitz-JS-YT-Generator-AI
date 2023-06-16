@@ -16,36 +16,35 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   constructor() {}
 
-  ngAfterViewInit() {
-    this.imgs.forEach(this.depict);
-  }
+  ngAfterViewInit() {}
 
   getContext() {
     return this.myCanvas.nativeElement.getContext('2d');
   }
-  // It's better to use async image loading.
-  loadImage = (url: string) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`load ${url} fail`));
-      img.src = url;
-    });
-  };
 
   // Here, I created a function to draw image.
-  depict = (options: any) => {
-    const ctx = this.getContext();
-    // And this is the key to this solution
-    // Always remember to make a copy of original object, then it just works :)
-    const myOptions = Object.assign({}, options);
-    return this.loadImage(myOptions.uri).then((img: any) => {
-      ctx?.drawImage(img, myOptions.x, myOptions.y, myOptions.sw, myOptions.sh);
-    });
-  };
+  onFileSelected(e: any) {
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    // load to image to get it's width/height
+    const img = new Image();
+    img.onload = () => {
+      const ctx = this.getContext();
+      this.generateOptions().forEach((option) =>
+        ctx?.drawImage(img, option.x, option.y, option.sw, option.sh)
+      );
+    };
+
+    // this is to setup loading the image
+    reader.onloadend = function () {
+      img.src = reader.result as any;
+    };
+    // this is to read the file
+    reader.readAsDataURL(file);
+  }
 
   chunks: any = [];
-  getMdeiaStreeam() {
+  getMdeiaStreeam(time: number) {
     const videoStream = this.myCanvas.nativeElement.captureStream(30);
     const mediaRecorder = new MediaRecorder(videoStream);
     mediaRecorder.ondataavailable = (e) => {
@@ -55,16 +54,21 @@ export class ImageGeneratorComponent implements AfterViewInit {
       var blob = new Blob(this.chunks, { type: 'video/mp4' });
       this.chunks = [];
       var videoURL = URL.createObjectURL(blob);
-      this.chunks.src = videoURL;
+      this.player.nativeElement.src = videoURL;
     };
     mediaRecorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
     };
+
+    // setInterval(draw, 300);
+    setTimeout(() => {
+      mediaRecorder.stop();
+    }, time);
     return mediaRecorder;
   }
 
-  startRecording() {
-    this.getMdeiaStreeam().start();
+  startRecording(time = 5000) {
+    this.getMdeiaStreeam(time);
   }
 
   generateOptions(gridWidth = 720, gridHeight = 1334, imageBloackSize = 50) {

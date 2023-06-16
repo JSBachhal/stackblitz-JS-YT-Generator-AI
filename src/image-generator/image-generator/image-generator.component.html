@@ -2,6 +2,8 @@
   <header>JS Automation</header>
   <div>
     <button (click)="startRecording()">Start Recording</button>
+    <input type="file" class="file-input"
+    (change)="onFileSelected($event)" #fileUpload>
   </div>
 
   <br />
@@ -10,6 +12,13 @@
   </section>
 
   <section>
-    <video id="player" width="720" height="1334" #player autoplay controls></video>
+    <!-- width="720"
+    height="1334" -->
+    <video
+      id="player"
+      #player
+      autoplay
+      controls
+    ></video>
   </section>
 </section>
