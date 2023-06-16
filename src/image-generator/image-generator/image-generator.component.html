@@ -2,29 +2,34 @@
   <header>JS Automation</header>
   <div>
     <button (click)="startRecording()">Start Recording</button>
-    <input type="file" class="file-input"
-    (change)="onFileSelected($event)" #fileUpload>
+    <input
+      type="file"
+      class="file-input"
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+
+    <div>
+      <input placeholder="Width" [(ngModel)]="canvasWidth">
+      <input placeholder="height" [(ngModel)]="canvasHeight">
+    </div>
   </div>
 
   <br />
   <section style="display:flex;">
     <section>
-      <!-- <canvas id="my-canvas" width="720" height="1334" #myCanvas></canvas> -->
-      <canvas id="my-canvas" width="240" height="480" #myCanvas></canvas>
-
+      <canvas id="my-canvas" [width]="canvasWidth" [height]="canvasHeight" #myCanvas></canvas>
     </section>
 
     <section>
-      <video autoplay controls></video>
-      <!-- <video
-      id="player"
-      #player
-      width="720"
-      height="1334"
-      autoplay
-      controls
-      ></video> -->
+      <video
+        id="player"
+        #player
+        [width]="canvasWidth"
+        [height]="canvasHeight"
+        autoplay
+        controls
+      ></video>
     </section>
-
   </section>
 </section>

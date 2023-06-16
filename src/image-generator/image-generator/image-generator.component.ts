@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Canvas2Video } from 'canvas2video';
 @Component({
   selector: 'app-image-generator',
   templateUrl: './image-generator.component.html',
   styleUrls: ['./image-generator.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
 })
 export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('myCanvas', { static: true })
   myCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
+
+  canvasWidth=720;
+  canvasHeight=1334;
 
   constructor() {}
 
