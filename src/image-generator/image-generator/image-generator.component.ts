@@ -18,10 +18,14 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   ngAfterViewInit() {}
 
+  getCanvas() {
+    return this.myCanvas.nativeElement;
+  }
   getContext() {
     return this.myCanvas.nativeElement.getContext('2d');
   }
 
+  img!: any;
   // Here, I created a function to draw image.
   onFileSelected(e: any) {
     const reader = new FileReader();
@@ -29,10 +33,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
     // load to image to get it's width/height
     const img = new Image();
     img.onload = () => {
-      const ctx = this.getContext();
-      this.generateOptions().forEach((option) =>
-        ctx?.drawImage(img, option.x, option.y, option.sw, option.sh)
-      );
+      this.img = img;
+      this.renderImage();
     };
 
     // this is to setup loading the image
@@ -43,32 +45,42 @@ export class ImageGeneratorComponent implements AfterViewInit {
     reader.readAsDataURL(file);
   }
 
+  renderImage() {
+    const ctx = this.getContext();
+    this.generateOptions().forEach((option) =>
+      ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh)
+    );
+  }
+
   chunks: any = [];
   getMdeiaStreeam(time: number) {
-    const videoStream = this.myCanvas.nativeElement.captureStream(30);
+    const videoStream = this.getCanvas().captureStream(30);
+    console.log(videoStream);
     const mediaRecorder = new MediaRecorder(videoStream);
-    mediaRecorder.ondataavailable = (e) => {
-      this.chunks.push(e.data);
-    };
+
     mediaRecorder.onstop = (e) => {
       var blob = new Blob(this.chunks, { type: 'video/mp4' });
       this.chunks = [];
       var videoURL = URL.createObjectURL(blob);
+      console.log(this.player);
       this.player.nativeElement.src = videoURL;
     };
     mediaRecorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
     };
 
-    // setInterval(draw, 300);
-    setTimeout(() => {
-      mediaRecorder.stop();
-    }, time);
+    setInterval(()=>this.draw(), 300);
+    setInterval(()=>this.renderImage(), 300);
+  
     return mediaRecorder;
   }
 
   startRecording(time = 5000) {
-    this.getMdeiaStreeam(time);
+    const mediaRecorder = this.getMdeiaStreeam(time);
+    console.log(mediaRecorder);
+    setTimeout(() => {
+      mediaRecorder.stop();
+    }, time);
   }
 
   generateOptions(gridWidth = 720, gridHeight = 1334, imageBloackSize = 50) {
@@ -86,4 +98,13 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     return options;
   }
+
+  draw (){
+  const colors = ["red", "blue", "yellow", "orange", "black", "white", "green"];
+  const ctx = this.getContext();
+  if(ctx){
+    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+    ctx.fillRect(0, 0, 240, 480);
+  }
+}
 }
