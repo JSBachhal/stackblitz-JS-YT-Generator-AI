@@ -69,15 +69,16 @@ export class ImageGeneratorComponent implements AfterViewInit {
       this.chunks.push(e.data);
     };
 
-    setInterval(()=>this.draw(), 300);
-    setInterval(()=>this.renderImage(), 300);
-  
+    // setInterval(()=>this.draw(), 300);
+    setInterval(() => this.renderImage(), 300);
+
     return mediaRecorder;
   }
 
   startRecording(time = 5000) {
     const mediaRecorder = this.getMdeiaStreeam(time);
-    console.log(mediaRecorder);
+    mediaRecorder.start();
+
     setTimeout(() => {
       mediaRecorder.stop();
     }, time);
@@ -99,12 +100,20 @@ export class ImageGeneratorComponent implements AfterViewInit {
     return options;
   }
 
-  draw (){
-  const colors = ["red", "blue", "yellow", "orange", "black", "white", "green"];
-  const ctx = this.getContext();
-  if(ctx){
-    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-    ctx.fillRect(0, 0, 240, 480);
+  draw() {
+    const colors = [
+      'red',
+      'blue',
+      'yellow',
+      'orange',
+      'black',
+      'white',
+      'green',
+    ];
+    const ctx = this.getContext();
+    if (ctx) {
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.fillRect(0, 0, 240, 480);
+    }
   }
-}
 }
