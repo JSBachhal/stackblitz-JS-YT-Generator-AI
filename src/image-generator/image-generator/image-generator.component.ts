@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Canvas2Video } from "canvas2video";
+import { Canvas2Video } from 'canvas2video';
 @Component({
   selector: 'app-image-generator',
   templateUrl: './image-generator.component.html',
@@ -14,7 +14,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
 
-  constructor() { }
+  constructor() {}
 
   ngAfterViewInit() {
     this.imgs.forEach(this.depict);
@@ -44,16 +44,15 @@ export class ImageGeneratorComponent implements AfterViewInit {
     });
   };
 
-
   chunks: any = [];
   getMdeiaStreeam() {
     const videoStream = this.myCanvas.nativeElement.captureStream(30);
     const mediaRecorder = new MediaRecorder(videoStream);
     mediaRecorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
-    }
+    };
     mediaRecorder.onstop = (e) => {
-      var blob = new Blob(this.chunks, { 'type': 'video/mp4' });
+      var blob = new Blob(this.chunks, { type: 'video/mp4' });
       this.chunks = [];
       var videoURL = URL.createObjectURL(blob);
       this.chunks.src = videoURL;
@@ -64,31 +63,23 @@ export class ImageGeneratorComponent implements AfterViewInit {
     return mediaRecorder;
   }
 
-  startRecording(){
+  startRecording() {
     this.getMdeiaStreeam().start();
   }
-  
-  imgs = [
-    {
-      uri: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fgifer.com%2Fen%2FFRWy&psig=AOvVaw0Vj8IZdFhkiNMeJjyv6tyS&ust=1687037757276000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCJDU5MPfyP8CFQAAAAAdAAAAABAE',
-      x: 15,
-      y: 15,
-      sw: 50,
-      sh: 50,
-    },
-    {
-      uri: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fgifer.com%2Fen%2FFRWy&psig=AOvVaw0Vj8IZdFhkiNMeJjyv6tyS&ust=1687037757276000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCJDU5MPfyP8CFQAAAAAdAAAAABAEY',
-      x: 15,
-      y: 80,
-      sw: 50,
-      sh: 50,
-    },
-    {
-      uri: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fgifer.com%2Fen%2FFRWy&psig=AOvVaw0Vj8IZdFhkiNMeJjyv6tyS&ust=1687037757276000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCJDU5MPfyP8CFQAAAAAdAAAAABAE',
-      x: 15,
-      y: 145,
-      sw: 50,
-      sh: 50,
-    },
-  ];
+
+  generateOptions(gridWidth = 720, gridHeight = 1334, imageBloackSize = 50) {
+    const options = [];
+    for (let height = 0; height <= gridHeight; height += imageBloackSize) {
+      for (let width = 0; width <= gridWidth; width += imageBloackSize) {
+        options.push({
+          x: width,
+          y: height,
+          sw: imageBloackSize,
+          sh: imageBloackSize,
+        });
+      }
+    }
+
+    return options;
+  }
 }
