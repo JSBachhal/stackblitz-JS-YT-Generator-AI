@@ -126,8 +126,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
     let widthCount = Math.floor(gridWidth/imageBloackSize);
     let heightCount = Math.floor(((gridHeight - this.textBloackSize*2))/imageBloackSize);
     const randomImageNumber = this.randomIntFromInterval(
-      widthCount,
-      heightCount
+      0,
+      widthCount* heightCount
       );
       console.log(randomImageNumber)
     console.log('widthCount'+widthCount)
