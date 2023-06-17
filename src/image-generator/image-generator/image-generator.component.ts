@@ -15,18 +15,20 @@ export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
 
-  canvasWidth = 720;
-  canvasHeight = 1334;
+  canvasWidth = 300;
+  canvasHeight = 150;
   imageBloackSize = 50;
+  textBloackSize = 50;
+
   videoTime = 5;
 
   fontSize = 30;
   textOnTop = 'Can you find the diffrent one?';
   textOnBottom = 'Subscribe and Like ';
 
-  constructor() { }
+  constructor() {}
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {}
 
   getCanvas() {
     return this.myCanvas.nativeElement;
@@ -84,8 +86,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   startRecording(time = 5000) {
     // this.addText();
-    this.addTextOnTop(this.textOnTop, this.fontSize, "red");
-    this.addTextOnBottom(this.textOnBottom, this.fontSize, "yellow");
+    this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
+    this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
 
@@ -94,10 +96,16 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }, time);
   }
 
-  generateOptions(gridWidth = this.canvasWidth, gridHeight = this.canvasHeight, imageBloackSize =this.imageBloackSize) {
+  generateOptions(
+    gridWidth = this.canvasWidth,
+    gridHeight = this.canvasHeight,
+    imageBloackSize = this.imageBloackSize
+  ) {
     const options = [];
-    for (let height = 0; height <= gridHeight; height += imageBloackSize) {
+    for (let height = this.textBloackSize ; height < gridHeight - this.textBloackSize; height += imageBloackSize) {
       for (let width = 0; width <= gridWidth; width += imageBloackSize) {
+        // if(height >)
+        console.log('height  '+height + ' width  '+ width)
         options.push({
           x: width,
           y: height,
@@ -117,8 +125,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }
     ctx.font = `${this.fontSize}px Arial`;
     if (this.textOnTop) {
-      ctx.textAlign = "center";
-      const fix = ctx.measureText("H").actualBoundingBoxDescent / 2; // Notice Here
+      ctx.textAlign = 'center';
+      const fix = ctx.measureText('H').actualBoundingBoxDescent / 2; // Notice Here
       const width = this.canvasWidth;
       const height = this.canvasHeight;
       ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight + fix);
@@ -132,35 +140,53 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }
   }
 
-  addTextOnTop(string: string, fontSize: number = this.fontSize, color: string) {
+  addTextOnTop(
+    string: string,
+    fontSize: number = this.fontSize,
+    color: string
+  ) {
     const ctx = this.getContext();
-    if (!ctx) { return }
-    ctx.fillStyle = "RGBA(0, 0, 0, 1)";
-    
-    ctx.font = fontSize.toString() + "px monospace";
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
+    if (!ctx) {
+      return;
+    }
+    ctx.fillStyle = 'RGBA(0, 0, 0, 1)';
 
-    ctx.fillRect(0, 25 - (fontSize * 1.5) / 2, this.canvasWidth, (fontSize * 1.5));
+    ctx.font = fontSize.toString() + 'px monospace';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+
+    ctx.fillRect(0, 0, this.canvasWidth, this.textBloackSize);
     ctx.fillStyle = color;
-    // const text = ctx.measureText(string);
-    ctx.fillText(string, this.getCanvas().width / 2, 25);
+    ctx.fillText(string, this.getCanvas().width / 2, fontSize);
   }
 
-  addTextOnBottom(string: string, fontSize: number = this.fontSize, color: string) {
+  addTextOnBottom(
+    string: string,
+    fontSize: number = this.fontSize,
+    color: string
+  ) {
     const ctx = this.getContext();
-    if (!ctx) { return }
-    ctx.fillStyle = "RGBA(0, 0, 0, 1)";
-    
-    ctx.font = fontSize.toString() + "px monospace";
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
+    if (!ctx) {
+      return;
+    }
+    ctx.fillStyle = 'RGBA(0, 0, 0, 1)';
 
+    ctx.font = fontSize.toString() + 'px monospace';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
 
-    ctx.fillRect(0,  this.canvasHeight -(fontSize * 1.5), this.canvasWidth, (fontSize * 1.5));
+    ctx.fillRect(
+      0,
+      this.canvasHeight - this.textBloackSize,
+      this.canvasWidth,
+      this.textBloackSize
+    );
     ctx.fillStyle = color;
-    
-    ctx.fillText(string,this.canvasWidth  / 2,  this.canvasHeight - 25);
-    
+
+    ctx.fillText(
+      string,
+      this.canvasWidth / 2,
+      this.canvasHeight - fontSize
+    );
   }
 }
