@@ -77,8 +77,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     const ctx = this.getContext();
     this.generateOptions().forEach((option) => {
       if (option.rotateImage) {
-        this.drawRotate(true,option);
-      
+        this.drawRotate(true, option);
       } else {
         ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
       }
@@ -107,7 +106,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     // ctx?.rotate((degrees * Math.PI/2) / 180);
     ctx?.rotate(Math.PI);
-    ctx?.drawImage(this.img, -this.img.width, -this.img.height );
+    ctx?.drawImage(this.img, -this.img.width, -this.img.height);
     const sourceImageData = canvas?.toDataURL();
     const destinationImage = new Image();
     destinationImage.onload = () => {
@@ -135,7 +134,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
       console.log(this.player);
       this.player.nativeElement.src = videoURL;
 
-      saveAs(blob, "Can you Find It.mp4");
+      saveAs(blob, 'Can you Find It.mp4');
     };
     mediaRecorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
@@ -150,7 +149,6 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     setTimeout(() => {
       mediaRecorder.stop();
-      mediaRecorder.();
     }, time);
   }
 
@@ -167,7 +165,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     const options = [];
     let count = 0;
     let widthCount = Math.floor(gridWidth / imageBloackSize);
-    let widthOfset = (gridWidth % imageBloackSize) /2;
+    let widthOfset = (gridWidth % imageBloackSize) / 2;
     let heightCount = Math.floor(
       (gridHeight - this.textBloackSize * 2) / imageBloackSize
     );
