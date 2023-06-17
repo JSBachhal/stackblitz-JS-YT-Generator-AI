@@ -137,7 +137,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
       document.body.appendChild(a);
       (a.style as any) = 'display: none';
       a.href = url;
-      a.download = 'Can you Find It.mp4';
+      a.download = 'Can you Find It ? #shorts .mp4';
       a.click();
       window.URL.revokeObjectURL(url);
     };
@@ -249,7 +249,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     ctx.fillText(
       string,
       this.canvasWidth / 2,
-      this.canvasHeight - this.fontSize / 3
+      this.canvasHeight - this.fontSize / 4
     );
   }
 }
