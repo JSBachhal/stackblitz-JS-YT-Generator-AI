@@ -68,6 +68,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
     this.generateOptions().forEach((option) =>
       ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh)
     );
+    this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
+    this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
   }
 
   chunks: any = [];
@@ -91,8 +93,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
   }
 
   startRecording(time = 5000) {
-    this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
-    this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
+   
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
     
