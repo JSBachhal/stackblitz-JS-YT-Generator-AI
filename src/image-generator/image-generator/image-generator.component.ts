@@ -169,7 +169,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     ctx.fillText(
       string,
       this.canvasWidth / 2,
-      this.canvasHeight - (this.fontSize/2)
+      this.canvasHeight - (this.fontSize/3)
     );
   }
 }
