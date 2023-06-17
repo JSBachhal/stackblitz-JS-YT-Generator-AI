@@ -17,6 +17,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   canvasWidth = 720;
   canvasHeight = 1334;
+  imageBloackSize = 50;
   videoTime = 5;
 
   fontSize = 30;
@@ -93,7 +94,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }, time);
   }
 
-  generateOptions(gridWidth = 720, gridHeight = 1334, imageBloackSize = 50) {
+  generateOptions(gridWidth = this.canvasWidth, gridHeight = this.canvasHeight, imageBloackSize =this.imageBloackSize) {
     const options = [];
     for (let height = 0; height <= gridHeight; height += imageBloackSize) {
       for (let width = 0; width <= gridWidth; width += imageBloackSize) {
