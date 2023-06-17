@@ -30,7 +30,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
   textOnBottom = 'SUBSCRIBE and LIKE ';
 
   constructor() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -76,10 +76,10 @@ export class ImageGeneratorComponent implements AfterViewInit {
     reader.readAsDataURL(file);
   }
 
-  optons:any=[];
+  optons: any = [];
   renderImage() {
     const ctx = this.getContext();
-    this.optons.forEach((option:any) => {
+    this.optons.forEach((option: any) => {
       if (option.rotateImage) {
         this.drawRotate(true, option);
       } else {
@@ -104,7 +104,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     ctx?.rotate(Math.PI);
     ctx?.drawImage(this.img, -this.imageBloackSize, -this.imageBloackSize, option.sw,
-      option.sh) ;
+      option.sh);
     const sourceImageData = canvas?.toDataURL();
     const destinationImage = new Image();
     destinationImage.onload = () => {
@@ -122,8 +122,26 @@ export class ImageGeneratorComponent implements AfterViewInit {
   chunks: any = [];
   getMdeiaStreeam(time: number) {
     const videoStream = this.getCanvas().captureStream(30);
+    const audioCtx = new AudioContext();
+    const mp3 = new Audio('./');
+// const stream = (mp3 as any).captureStream();
+mp3.play(); 
 
-    const mediaRecorder = new MediaRecorder(videoStream);
+    const destination = audioCtx.createMediaStreamDestination();
+    const source1 = audioCtx.createMediaElementSource(mp3);
+    // const source2 = audioCtx.createMediaStreamSource(remoteStream);
+
+    source1.connect(destination);
+    // source2.connect(destination);
+
+
+
+    const outputStream = new MediaStream();
+    outputStream.addTrack(videoStream.getVideoTracks()[0]);
+    outputStream.addTrack(destination.stream.getAudioTracks()[0]);
+    // outputStream.addTrack(destination.stream.getAudioTracks()[0]);
+
+    const mediaRecorder = new MediaRecorder(outputStream);
 
     mediaRecorder.onstop = (e) => {
       var blob = new Blob(this.chunks, { type: 'video/mp4' });
@@ -149,9 +167,9 @@ export class ImageGeneratorComponent implements AfterViewInit {
     return mediaRecorder;
   }
 
-  startRecording(time = 5000) {
+  startRecording(time = this.videoTime * 1000) {
     const mediaRecorder = this.getMdeiaStreeam(time);
-    setInterval(()=>this.renderImage(),300)
+    setInterval(() => this.renderImage(), 300)
     mediaRecorder.start();
 
     setTimeout(() => {
