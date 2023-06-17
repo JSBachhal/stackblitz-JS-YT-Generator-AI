@@ -30,8 +30,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     const ctx = this.getContext();
-    if(ctx){
-      ctx.fillStyle = "#222";
+    if (ctx) {
+      ctx.fillStyle = '#222';
       ctx.fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
     }
   }
@@ -65,9 +65,18 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   renderImage() {
     const ctx = this.getContext();
-    this.generateOptions().forEach((option) =>
-      ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh)
-    );
+    this.generateOptions().forEach((option) => {
+      if (option.rotateImage) {
+        console.log(option)
+        ctx?.save();
+        ctx?.translate(option.x, option.y); // change origin
+        ctx?.rotate(Math.PI);
+        ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
+        ctx?.restore();
+      } else {
+        ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
+      }
+    });
     this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
     this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
   }
@@ -93,13 +102,17 @@ export class ImageGeneratorComponent implements AfterViewInit {
   }
 
   startRecording(time = 5000) {
-   
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
-    
+
     setTimeout(() => {
       mediaRecorder.stop();
     }, time);
+  }
+
+  randomIntFromInterval(min: number, max: number) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   generateOptions(
@@ -107,18 +120,39 @@ export class ImageGeneratorComponent implements AfterViewInit {
     gridHeight = this.canvasHeight,
     imageBloackSize = this.imageBloackSize
   ) {
+   
     const options = [];
-    for (let height = this.textBloackSize ; height < gridHeight - this.textBloackSize; height += imageBloackSize) {
-      for (let width = 0; width <= gridWidth; width += imageBloackSize) {
-        // if(height >)
-        // console.log('height  '+height + ' width  '+ width)
+    let count = 0;
+    let widthCount = Math.floor(gridWidth/imageBloackSize);
+    let heightCount = Math.floor(((gridHeight - this.textBloackSize*2))/imageBloackSize);
+    const randomImageNumber = this.randomIntFromInterval(
+      widthCount,
+      heightCount
+      );
+      console.log(randomImageNumber)
+    console.log('widthCount'+widthCount)
+    console.log('heightCount'+heightCount)
+    let xPosition = 0;
+    let yPosition = imageBloackSize;
+    for (
+      let height = 0;
+      height < heightCount;
+      height ++
+    ) {
+    
+      for (let width = 0; width < widthCount; width ++) {
+        count += 1;
         options.push({
-          x: width,
-          y: height,
+          x: xPosition,
+          y: yPosition,
           sw: imageBloackSize,
           sh: imageBloackSize,
+          rotateImage: count === randomImageNumber,
         });
+        xPosition = xPosition+imageBloackSize;
       }
+      xPosition=0;
+      yPosition = yPosition+imageBloackSize;
     }
 
     return options;
@@ -170,7 +204,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     ctx.fillText(
       string,
       this.canvasWidth / 2,
-      this.canvasHeight - (this.fontSize/3)
+      this.canvasHeight - this.fontSize / 3
     );
   }
 }
