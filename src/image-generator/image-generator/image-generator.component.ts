@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { saveAs } from 'file-saver';
+import { saveAs } from './fileSaver';
 
 @Component({
   selector: 'app-image-generator',
