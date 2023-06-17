@@ -19,13 +19,13 @@ export class ImageGeneratorComponent implements AfterViewInit {
   canvasHeight = 1334;
   videoTime = 5;
 
-  fontSize = '30';
+  fontSize = 30;
   textOnTop = 'Can you find the diffrent one?';
   textOnBottom = 'Subscribe and Like';
 
-  constructor() {}
+  constructor() { }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   getCanvas() {
     return this.myCanvas.nativeElement;
@@ -83,7 +83,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   startRecording(time = 5000) {
     // this.addText();
-    this.centeredText("Hello World", 30, "red");
+    this.centeredText(this.textOnTop, this.fontSize, "red");
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
 
@@ -119,7 +119,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
       const fix = ctx.measureText("H").actualBoundingBoxDescent / 2; // Notice Here
       const width = this.canvasWidth;
       const height = this.canvasHeight;
-      ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight+fix);
+      ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight + fix);
       ctx.fillText(this.textOnTop, width, 50);
     }
     if (this.textOnBottom) {
@@ -130,22 +130,16 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }
   }
 
-   centeredText(string:string, fontSize:number, color:string) {
+  centeredText(string: string, fontSize: number = this.fontSize, color: string) {
     const ctx = this.getContext();
-    if (!ctx) {return}
-
-    var i = string.length;
-    i = i*fontSize*0.62;
-    if (i > this.getCanvas().width) {
-      i = this.getCanvas().width;
-    }
-    ctx.fillStyle = "RGBA(255, 255, 255, 0.8)";
-    ctx.fillRect(this.getCanvas().width / 2 - i / 2,this.getCanvas().height / 2 - (fontSize * 1.5) / 2, i, (fontSize * 1.5) );
+    if (!ctx) { return }
+    ctx.fillStyle = "RGBA(0, 0, 0, 1)";
+    ctx.fillRect(0, 25 - (fontSize * 1.5) / 2, this.canvasWidth, (fontSize * 1.5));
     ctx.font = fontSize.toString() + "px monospace";
     ctx.fillStyle = color;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
 
-    ctx.fillText(string, this.getCanvas().width / 2, this.getCanvas().height / 2);
-}
+    ctx.fillText(string, this.getCanvas().width / 2, 25);
+  }
 }
