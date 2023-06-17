@@ -30,7 +30,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
   textOnTop = 'CAN YOUT FIND THE ODD ONE OUT?';
   textOnBottom = 'SUBSCRIBE and LIKE ';
   audiopath =
-  './Tick Tock - Jimmy Fontanez_Media Right Productions.mp3';
+    'https://redirector.googlevideo.com/videoplayback?expire=1687021038&ei=luONZPvqHZqE0u8PuvO8wAw&ip=0.0.0.0&id=b87cc0186b1c9601&itag=24&source=yt_reference&requiressl=yes&susc=ytcm&mime=audio/mpeg&vprv=1&gir=yes&clen=1665392&dur=104.071&lmt=1579724387867494&cmo=secure_transport=yes&sparams=expire,ei,ip,id,itag,source,requiressl,susc,mime,vprv,gir,clen,dur,lmt&sig=AOq0QJ8wRQIgYBTUAZ6kSOTJVlrR2ZRU68rrnUEJAlNMyX5aGtrHw2wCIQCfwaLYp9ydTyIE0NrU8ZaYBTNhqljIhNiEQrGuhotYyQ==';
+  // './Tick Tock - Jimmy Fontanez_Media Right Productions.mp3';
   constructor() {}
 
   ngAfterViewInit() {
@@ -40,7 +41,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
       ctx.fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
     }
 
-    this.audio.nativeElement.src= this.audiopath;
+    this.audio.nativeElement.crossOrigin = 'anonymous';
+    this.audio.nativeElement.src = this.audiopath;
   }
 
   gethiddenCanvas() {
@@ -130,15 +132,16 @@ export class ImageGeneratorComponent implements AfterViewInit {
   getMdeiaStreeam(time: number) {
     const videoStream = this.getCanvas().captureStream(30);
     const audioCtx = new AudioContext();
-   
+
     const mp3 = new Audio(this.audiopath);
 
-    
     // const stream = (mp3 as any).captureStream();
     this.audio.nativeElement.play();
 
     const destination = audioCtx.createMediaStreamDestination();
-    const audioSource = audioCtx.createMediaElementSource(this.audio.nativeElement);
+    const audioSource = audioCtx.createMediaElementSource(
+      this.audio.nativeElement
+    );
     // const source2 = audioCtx.createMediaStreamSource(remoteStream);
 
     audioSource.connect(destination);
