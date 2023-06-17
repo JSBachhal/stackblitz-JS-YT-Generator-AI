@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-image-generator',
   templateUrl: './image-generator.component.html',
@@ -17,6 +16,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
   hiddenCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
+  @ViewChild('audio', { static: true })
+  audio!: ElementRef<HTMLVideoElement>;
 
   canvasWidth = 720;
   canvasHeight = 1334;
@@ -28,10 +29,9 @@ export class ImageGeneratorComponent implements AfterViewInit {
   fontSize = 30;
   textOnTop = 'CAN YOUT FIND THE ODD ONE OUT?';
   textOnBottom = 'SUBSCRIBE and LIKE ';
-
-  constructor() {
-
-  }
+  audiopath =
+  './Tick Tock - Jimmy Fontanez_Media Right Productions.mp3';
+  constructor() {}
 
   ngAfterViewInit() {
     const ctx = this.getContext();
@@ -39,6 +39,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
       ctx.fillStyle = '#222';
       ctx.fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
     }
+
+    this.audio.nativeElement.src= this.audiopath;
   }
 
   gethiddenCanvas() {
@@ -103,8 +105,13 @@ export class ImageGeneratorComponent implements AfterViewInit {
     let ctx = canvas.getContext('2d');
 
     ctx?.rotate(Math.PI);
-    ctx?.drawImage(this.img, -this.imageBloackSize, -this.imageBloackSize, option.sw,
-      option.sh);
+    ctx?.drawImage(
+      this.img,
+      -this.imageBloackSize,
+      -this.imageBloackSize,
+      option.sw,
+      option.sh
+    );
     const sourceImageData = canvas?.toDataURL();
     const destinationImage = new Image();
     destinationImage.onload = () => {
@@ -118,23 +125,24 @@ export class ImageGeneratorComponent implements AfterViewInit {
     };
     destinationImage.src = sourceImageData;
   }
- 
+
   chunks: any = [];
   getMdeiaStreeam(time: number) {
     const videoStream = this.getCanvas().captureStream(30);
     const audioCtx = new AudioContext();
-    const mp3 = new Audio('./');
-// const stream = (mp3 as any).captureStream();
-mp3.play(); 
+   
+    const mp3 = new Audio(this.audiopath);
+
+    
+    // const stream = (mp3 as any).captureStream();
+    this.audio.nativeElement.play();
 
     const destination = audioCtx.createMediaStreamDestination();
-    const source1 = audioCtx.createMediaElementSource(mp3);
+    const audioSource = audioCtx.createMediaElementSource(this.audio.nativeElement);
     // const source2 = audioCtx.createMediaStreamSource(remoteStream);
 
-    source1.connect(destination);
+    audioSource.connect(destination);
     // source2.connect(destination);
-
-
 
     const outputStream = new MediaStream();
     outputStream.addTrack(videoStream.getVideoTracks()[0]);
@@ -149,7 +157,6 @@ mp3.play();
       var videoURL = URL.createObjectURL(blob);
       console.log(this.player);
       this.player.nativeElement.src = videoURL;
-
 
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a') as any;
@@ -169,7 +176,7 @@ mp3.play();
 
   startRecording(time = this.videoTime * 1000) {
     const mediaRecorder = this.getMdeiaStreeam(time);
-    setInterval(() => this.renderImage(), 300)
+    setInterval(() => this.renderImage(), 300);
     mediaRecorder.start();
 
     setTimeout(() => {
