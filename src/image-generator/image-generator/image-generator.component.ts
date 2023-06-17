@@ -86,7 +86,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
         ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
       }
     });
-    this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
+    this.addTextOnTop(this.textOnTop, this.fontSize, 'yellow');
     this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
   }
 
