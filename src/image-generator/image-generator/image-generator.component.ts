@@ -7,7 +7,7 @@ import { Canvas2Video } from 'canvas2video';
   templateUrl: './image-generator.component.html',
   styleUrls: ['./image-generator.component.css'],
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
 })
 export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('myCanvas', { static: true })
@@ -15,8 +15,13 @@ export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
 
-  canvasWidth=720;
-  canvasHeight=1334;
+  canvasWidth = 720;
+  canvasHeight = 1334;
+  videoTime = 5;
+
+  fontSize = '30';
+  textOnTop = 'Can you find the diffrent one?';
+  textOnBottom = 'Subscribe and Like';
 
   constructor() {}
 
@@ -118,6 +123,20 @@ export class ImageGeneratorComponent implements AfterViewInit {
     if (ctx) {
       ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
       ctx.fillRect(0, 0, 240, 480);
+    }
+  }
+
+  addText() {
+    const ctx = this.getContext();
+    if (!ctx) {
+      return;
+    }
+    ctx.font = '30px Arial';
+    if (this.textOnTop) {
+      ctx.fillText(this.textOnTop, 10, 50);
+    }
+    if (this.textOnBottom) {
+      ctx.fillText(this.textOnBottom, 10, 50);
     }
   }
 }

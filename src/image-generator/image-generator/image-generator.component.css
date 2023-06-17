@@ -1,1 +1,13 @@
-#my-canvas { background: #7F7F7F; }
+#my-canvas {
+  background: #7f7f7f;
+}
+
+.flex {
+  display: flex;
+  /* justify-content: space-around; */
+  margin-right: 1rem;
+  margin-bottom: .5rem;
+}
+.flex > :nth-child(even) {
+  margin: 0 1rem;
+}

@@ -1,24 +1,60 @@
 <section>
   <header>JS Automation</header>
   <div>
-    <button (click)="startRecording()">Start Recording</button>
-    <input
-      type="file"
-      class="file-input"
-      (change)="onFileSelected($event)"
-      #fileUpload
-    />
+    <div class="flex">
+      <div>
+        <button (click)="startRecording()">Start Recording</button>
+      </div>
+      <div>
+        <input
+          type="file"
+          class="file-input"
+          (change)="onFileSelected($event)"
+          #fileUpload
+        />
+      </div>
+    </div>
 
-    <div>
-      <input placeholder="Width" [(ngModel)]="canvasWidth">
-      <input placeholder="height" [(ngModel)]="canvasHeight">
+    <div class="flex">
+      <div>
+        <label>Width</label>
+        <input placeholder="Width" [(ngModel)]="canvasWidth" />
+      </div>
+      <div>
+        <label>Height</label>
+        <input placeholder="height" [(ngModel)]="canvasHeight" />
+      </div>
+      <div>
+        <label>Video Time</label>
+        <input placeholder="videoTime" [(ngModel)]="videoTime" />
+      </div>
+    </div>
+
+    <div class="flex">
+      <div>
+        <label>Font Size</label>
+        <input placeholder="fontSize" [(ngModel)]="fontSize" />
+      </div>
+      <div>
+        <label>Text On Top</label>
+        <input placeholder="textOnTop" [(ngModel)]="textOnTop" />
+      </div>
+      <div>
+        <label>Text On Bottom</label>
+        <input placeholder="textOnBottom" [(ngModel)]="textOnBottom" />
+      </div>
     </div>
   </div>
 
   <br />
-  <section style="display:flex;">
+  <section class="flex">
     <section>
-      <canvas id="my-canvas" [width]="canvasWidth" [height]="canvasHeight" #myCanvas></canvas>
+      <canvas
+        id="my-canvas"
+        [width]="canvasWidth"
+        [height]="canvasHeight"
+        #myCanvas
+      ></canvas>
     </section>
 
     <section>
