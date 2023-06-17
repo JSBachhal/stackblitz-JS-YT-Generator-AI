@@ -15,8 +15,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
 
-  canvasWidth = 300;
-  canvasHeight = 150;
+  canvasWidth = 720;
+  canvasHeight = 1334;
   imageBloackSize = 50;
   textBloackSize = 50;
 
