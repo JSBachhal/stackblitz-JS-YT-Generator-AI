@@ -29,7 +29,9 @@ export class ImageGeneratorComponent implements AfterViewInit {
   textOnTop = 'Can you find the diffrent one?';
   textOnBottom = 'Subscribe and Like ';
 
-  constructor() {}
+  constructor() {
+    
+  }
 
   ngAfterViewInit() {
     const ctx = this.getContext();
@@ -56,6 +58,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
   rotatedImage!: any;
   // Here, I created a function to draw image.
   onFileSelected(e: any) {
+    this.optons = this.generateOptions();
     const reader = new FileReader();
     const file = e.target.files[0];
     // load to image to get it's width/height
@@ -73,9 +76,10 @@ export class ImageGeneratorComponent implements AfterViewInit {
     reader.readAsDataURL(file);
   }
 
+  optons:any=[];
   renderImage() {
     const ctx = this.getContext();
-    this.generateOptions().forEach((option) => {
+    this.optons.forEach((option:any) => {
       if (option.rotateImage) {
         this.drawRotate(true, option);
       } else {
@@ -98,13 +102,6 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     let ctx = canvas.getContext('2d');
 
-    // if (clockwise) {
-    //   ctx?.translate(ih, 0);
-    // } else {
-    //   ctx?.translate(0, iw);
-    // }
-
-    // ctx?.rotate((degrees * Math.PI/2) / 180);
     ctx?.rotate(Math.PI);
     ctx?.drawImage(this.img, -this.img.width, -this.img.height);
     const sourceImageData = canvas?.toDataURL();
@@ -136,9 +133,9 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
 
       var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
+      var a = document.createElement('a') as any;
       document.body.appendChild(a);
-      a.style = 'display: none';
+      (a.style as any) = 'display: none';
       a.href = url;
       a.download = 'Can you Find It.mp4';
       a.click();
@@ -153,6 +150,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   startRecording(time = 5000) {
     const mediaRecorder = this.getMdeiaStreeam(time);
+    setInterval(()=>this.renderImage(),300)
     mediaRecorder.start();
 
     setTimeout(() => {
