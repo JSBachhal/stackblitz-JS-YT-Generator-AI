@@ -53,12 +53,19 @@
   <br />
   <section class="flex">
     <section>
+      <canvas 
+        id="hiddenCanvas"
+        [width]="50"
+        [height]="50"
+        #hiddenCanvas
+      ></canvas>
       <canvas
         id="my-canvas"
         [width]="canvasWidth"
         [height]="canvasHeight"
         #myCanvas
       ></canvas>
+      
     </section>
 
     <section>

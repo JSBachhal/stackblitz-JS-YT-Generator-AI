@@ -12,6 +12,8 @@ import { Canvas2Video } from 'canvas2video';
 export class ImageGeneratorComponent implements AfterViewInit {
   @ViewChild('myCanvas', { static: true })
   myCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('hiddenCanvas', { static: true })
+  hiddenCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('player', { static: true })
   player!: ElementRef<HTMLVideoElement>;
 
@@ -36,14 +38,21 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }
   }
 
+  gethiddenCanvas() {
+    return this.hiddenCanvas.nativeElement;
+  }
   getCanvas() {
     return this.myCanvas.nativeElement;
   }
   getContext() {
     return this.myCanvas.nativeElement.getContext('2d');
   }
+  gethiddenCanvasContext() {
+    return this.hiddenCanvas.nativeElement.getContext('2d');
+  }
 
   img!: any;
+  rotatedImage!: any;
   // Here, I created a function to draw image.
   onFileSelected(e: any) {
     const reader = new FileReader();
@@ -67,18 +76,49 @@ export class ImageGeneratorComponent implements AfterViewInit {
     const ctx = this.getContext();
     this.generateOptions().forEach((option) => {
       if (option.rotateImage) {
-        console.log(option)
-        ctx?.save();
-        ctx?.translate(option.x, option.y); // change origin
-        ctx?.rotate(Math.PI);
-        ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
-        ctx?.restore();
+        this.drawRotate(true,option);
+      
       } else {
         ctx?.drawImage(this.img, option.x, option.y, option.sw, option.sh);
       }
     });
     this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
     this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
+  }
+
+  drawRotate(clockwise: boolean = true, option: any) {
+    const degrees = clockwise == true ? 90 : -90;
+    let canvas = this.gethiddenCanvas();
+
+    const iw = this.img.naturalWidth;
+    const ih = this.img.naturalHeight;
+
+    canvas.width = ih;
+    canvas.height = iw;
+
+    let ctx = canvas.getContext('2d');
+
+    // if (clockwise) {
+    //   ctx?.translate(ih, 0);
+    // } else {
+    //   ctx?.translate(0, iw);
+    // }
+
+    // ctx?.rotate((degrees * Math.PI/2) / 180);
+    ctx?.rotate(Math.PI);
+    ctx?.drawImage(this.img, -this.img.width, -this.img.height );
+    const sourceImageData = canvas?.toDataURL();
+    const destinationImage = new Image();
+    destinationImage.onload = () => {
+      this.getContext()?.drawImage(
+        destinationImage,
+        option.x,
+        option.y,
+        option.sw,
+        option.sh
+      );
+    };
+    destinationImage.src = sourceImageData;
   }
 
   chunks: any = [];
@@ -120,27 +160,23 @@ export class ImageGeneratorComponent implements AfterViewInit {
     gridHeight = this.canvasHeight,
     imageBloackSize = this.imageBloackSize
   ) {
-   
     const options = [];
     let count = 0;
-    let widthCount = Math.floor(gridWidth/imageBloackSize);
-    let heightCount = Math.floor(((gridHeight - this.textBloackSize*2))/imageBloackSize);
+    let widthCount = Math.floor(gridWidth / imageBloackSize);
+    let heightCount = Math.floor(
+      (gridHeight - this.textBloackSize * 2) / imageBloackSize
+    );
     const randomImageNumber = this.randomIntFromInterval(
       0,
-      widthCount* heightCount
-      );
-      console.log(randomImageNumber)
-    console.log('widthCount'+widthCount)
-    console.log('heightCount'+heightCount)
+      widthCount * heightCount
+    );
+    console.log(randomImageNumber);
+    console.log('widthCount' + widthCount);
+    console.log('heightCount' + heightCount);
     let xPosition = 0;
     let yPosition = imageBloackSize;
-    for (
-      let height = 0;
-      height < heightCount;
-      height ++
-    ) {
-    
-      for (let width = 0; width < widthCount; width ++) {
+    for (let height = 0; height < heightCount; height++) {
+      for (let width = 0; width < widthCount; width++) {
         count += 1;
         options.push({
           x: xPosition,
@@ -149,10 +185,10 @@ export class ImageGeneratorComponent implements AfterViewInit {
           sh: imageBloackSize,
           rotateImage: count === randomImageNumber,
         });
-        xPosition = xPosition+imageBloackSize;
+        xPosition = xPosition + imageBloackSize;
       }
-      xPosition=0;
-      yPosition = yPosition+imageBloackSize;
+      xPosition = 0;
+      yPosition = yPosition + imageBloackSize;
     }
 
     return options;
