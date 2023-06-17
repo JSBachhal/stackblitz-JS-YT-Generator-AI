@@ -23,11 +23,11 @@ export class ImageGeneratorComponent implements AfterViewInit {
   imageBloackSize = 100;
   textBloackSize = 50;
 
-  videoTime = 5;
+  videoTime = 8;
 
   fontSize = 30;
-  textOnTop = 'Can you find the diffrent one?';
-  textOnBottom = 'Subscribe and Like ';
+  textOnTop = 'CAN YOUT FIND THE ODD ONE OUT?';
+  textOnBottom = 'SUBSCRIBE and LIKE ';
 
   constructor() {
     
@@ -97,13 +97,14 @@ export class ImageGeneratorComponent implements AfterViewInit {
     const iw = this.img.naturalWidth;
     const ih = this.img.naturalHeight;
 
-    canvas.width = ih;
-    canvas.height = iw;
+    canvas.width = this.imageBloackSize;
+    canvas.height = this.imageBloackSize;
 
     let ctx = canvas.getContext('2d');
 
     ctx?.rotate(Math.PI);
-    ctx?.drawImage(this.img, -this.img.width, -this.img.height);
+    ctx?.drawImage(this.img, -this.imageBloackSize, -this.imageBloackSize, option.sw,
+      option.sh) ;
     const sourceImageData = canvas?.toDataURL();
     const destinationImage = new Image();
     destinationImage.onload = () => {
@@ -183,7 +184,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     console.log('widthCount' + widthCount);
     console.log('heightCount' + heightCount);
     let xPosition = widthOfset;
-    let yPosition = imageBloackSize;
+    let yPosition = imageBloackSize - widthOfset;
     for (let height = 0; height < heightCount; height++) {
       for (let width = 0; width < widthCount; width++) {
         count += 1;
