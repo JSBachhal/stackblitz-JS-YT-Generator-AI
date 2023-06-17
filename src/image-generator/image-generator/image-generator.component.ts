@@ -91,12 +91,11 @@ export class ImageGeneratorComponent implements AfterViewInit {
   }
 
   startRecording(time = 5000) {
-    // this.addText();
     this.addTextOnTop(this.textOnTop, this.fontSize, 'red');
     this.addTextOnBottom(this.textOnBottom, this.fontSize, 'yellow');
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
-
+    
     setTimeout(() => {
       mediaRecorder.stop();
     }, time);
@@ -111,7 +110,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     for (let height = this.textBloackSize ; height < gridHeight - this.textBloackSize; height += imageBloackSize) {
       for (let width = 0; width <= gridWidth; width += imageBloackSize) {
         // if(height >)
-        console.log('height  '+height + ' width  '+ width)
+        // console.log('height  '+height + ' width  '+ width)
         options.push({
           x: width,
           y: height,
@@ -124,28 +123,6 @@ export class ImageGeneratorComponent implements AfterViewInit {
     return options;
   }
 
-  addText() {
-    const ctx = this.getContext();
-    if (!ctx) {
-      return;
-    }
-    ctx.font = `${this.fontSize}px Arial`;
-    if (this.textOnTop) {
-      ctx.textAlign = 'center';
-      const fix = ctx.measureText('H').actualBoundingBoxDescent / 2; // Notice Here
-      const width = this.canvasWidth;
-      const height = this.canvasHeight;
-      ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight + fix);
-      ctx.fillText(this.textOnTop, width, 50);
-    }
-    if (this.textOnBottom) {
-      const width = this.canvasWidth / 2;
-      const height = this.canvasHeight - 50;
-      ctx.fillRect(width, height, width, height);
-      ctx.fillText(this.textOnBottom, width, height);
-    }
-  }
-
   addTextOnTop(
     string: string,
     fontSize: number = this.fontSize,
@@ -155,7 +132,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     if (!ctx) {
       return;
     }
-    ctx.fillStyle = 'RGBA(0, 0, 0, 1)';
+    ctx.fillStyle = '#222';
 
     ctx.font = fontSize.toString() + 'px monospace';
     ctx.textBaseline = 'middle';
@@ -175,10 +152,10 @@ export class ImageGeneratorComponent implements AfterViewInit {
     if (!ctx) {
       return;
     }
-    ctx.fillStyle = 'RGBA(0, 0, 0, 1)';
+    ctx.fillStyle = '#222';
 
     ctx.font = fontSize.toString() + 'px monospace';
-    ctx.textBaseline = 'middle';
+    ctx.textBaseline = 'bottom';
     ctx.textAlign = 'center';
 
     ctx.fillRect(
@@ -192,7 +169,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     ctx.fillText(
       string,
       this.canvasWidth / 2,
-      this.canvasHeight - fontSize
+      this.canvasHeight - (this.fontSize/2)
     );
   }
 }
