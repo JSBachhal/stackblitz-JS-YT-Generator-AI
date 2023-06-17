@@ -163,6 +163,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     const options = [];
     let count = 0;
     let widthCount = Math.floor(gridWidth / imageBloackSize);
+    let widthOfset = (gridWidth % imageBloackSize) /2;
     let heightCount = Math.floor(
       (gridHeight - this.textBloackSize * 2) / imageBloackSize
     );
@@ -173,7 +174,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     console.log(randomImageNumber);
     console.log('widthCount' + widthCount);
     console.log('heightCount' + heightCount);
-    let xPosition = 0;
+    let xPosition = widthOfset;
     let yPosition = imageBloackSize;
     for (let height = 0; height < heightCount; height++) {
       for (let width = 0; width < widthCount; width++) {
@@ -187,7 +188,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
         });
         xPosition = xPosition + imageBloackSize;
       }
-      xPosition = 0;
+      xPosition = widthOfset;
       yPosition = yPosition + imageBloackSize;
     }
 
