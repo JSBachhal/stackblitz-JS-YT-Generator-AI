@@ -21,7 +21,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   fontSize = 30;
   textOnTop = 'Can you find the diffrent one?';
-  textOnBottom = 'Subscribe and Like';
+  textOnBottom = 'Subscribe and Like ';
 
   constructor() { }
 
@@ -142,9 +142,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     ctx.fillRect(0, 25 - (fontSize * 1.5) / 2, this.canvasWidth, (fontSize * 1.5));
     ctx.fillStyle = color;
+    // const text = ctx.measureText(string);
     ctx.fillText(string, this.getCanvas().width / 2, 25);
-    
-    ctx.fillRect(0,  this.canvasHeight -(fontSize * 1.5), this.canvasWidth, (fontSize * 1.5));
   }
 
   addTextOnBottom(string: string, fontSize: number = this.fontSize, color: string) {
@@ -159,7 +158,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     ctx.fillRect(0,  this.canvasHeight -(fontSize * 1.5), this.canvasWidth, (fontSize * 1.5));
     ctx.fillStyle = color;
-    ctx.fillText(string, this.canvasHeight -(fontSize * 1.5) / 2, 25);
+    
+    ctx.fillText(string,this.canvasWidth  / 2,  this.canvasHeight - 25);
     
   }
 }
