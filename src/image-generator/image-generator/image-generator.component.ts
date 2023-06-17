@@ -64,7 +64,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
   chunks: any = [];
   getMdeiaStreeam(time: number) {
     const videoStream = this.getCanvas().captureStream(30);
-    console.log(videoStream);
+
     const mediaRecorder = new MediaRecorder(videoStream);
 
     mediaRecorder.onstop = (e) => {
@@ -78,13 +78,12 @@ export class ImageGeneratorComponent implements AfterViewInit {
       this.chunks.push(e.data);
     };
 
-    // setInterval(()=>this.draw(), 300);
-    setInterval(() => this.renderImage(), 300);
-
     return mediaRecorder;
   }
 
   startRecording(time = 5000) {
+    // this.addText();
+    this.centeredText("Hello World", 30, "red");
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
 
@@ -109,34 +108,44 @@ export class ImageGeneratorComponent implements AfterViewInit {
     return options;
   }
 
-  draw() {
-    const colors = [
-      'red',
-      'blue',
-      'yellow',
-      'orange',
-      'black',
-      'white',
-      'green',
-    ];
-    const ctx = this.getContext();
-    if (ctx) {
-      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-      ctx.fillRect(0, 0, 240, 480);
-    }
-  }
-
   addText() {
     const ctx = this.getContext();
     if (!ctx) {
       return;
     }
-    ctx.font = '30px Arial';
+    ctx.font = `${this.fontSize}px Arial`;
     if (this.textOnTop) {
-      ctx.fillText(this.textOnTop, 10, 50);
+      ctx.textAlign = "center";
+      const fix = ctx.measureText("H").actualBoundingBoxDescent / 2; // Notice Here
+      const width = this.canvasWidth;
+      const height = this.canvasHeight;
+      ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight+fix);
+      ctx.fillText(this.textOnTop, width, 50);
     }
     if (this.textOnBottom) {
-      ctx.fillText(this.textOnBottom, 10, 50);
+      const width = this.canvasWidth / 2;
+      const height = this.canvasHeight - 50;
+      ctx.fillRect(width, height, width, height);
+      ctx.fillText(this.textOnBottom, width, height);
     }
   }
+
+   centeredText(string:string, fontSize:number, color:string) {
+    const ctx = this.getContext();
+    if (!ctx) {return}
+
+    var i = string.length;
+    i = i*fontSize*0.62;
+    if (i > this.getCanvas().width) {
+      i = this.getCanvas().width;
+    }
+    ctx.fillStyle = "RGBA(255, 255, 255, 0.8)";
+    ctx.fillRect(this.getCanvas().width / 2 - i / 2,this.getCanvas().height / 2 - (fontSize * 1.5) / 2, i, (fontSize * 1.5) );
+    ctx.font = fontSize.toString() + "px monospace";
+    ctx.fillStyle = color;
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+
+    ctx.fillText(string, this.getCanvas().width / 2, this.getCanvas().height / 2);
+}
 }
