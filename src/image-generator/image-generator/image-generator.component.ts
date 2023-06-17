@@ -118,7 +118,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
     };
     destinationImage.src = sourceImageData;
   }
-
+ 
   chunks: any = [];
   getMdeiaStreeam(time: number) {
     const videoStream = this.getCanvas().captureStream(30);
