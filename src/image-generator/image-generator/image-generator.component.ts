@@ -20,7 +20,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   canvasWidth = 720;
   canvasHeight = 1334;
-  imageBloackSize = 50;
+  imageBloackSize = 100;
   textBloackSize = 50;
 
   videoTime = 5;
