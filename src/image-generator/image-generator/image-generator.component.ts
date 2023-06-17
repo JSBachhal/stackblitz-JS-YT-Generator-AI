@@ -28,7 +28,13 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   constructor() {}
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    const ctx = this.getContext();
+    if(ctx){
+      ctx.fillStyle = "#222";
+      ctx.fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
+    }
+  }
 
   getCanvas() {
     return this.myCanvas.nativeElement;
