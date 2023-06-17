@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Canvas2Video } from 'canvas2video';
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-image-generator',
   templateUrl: './image-generator.component.html',
@@ -133,6 +134,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
       var videoURL = URL.createObjectURL(blob);
       console.log(this.player);
       this.player.nativeElement.src = videoURL;
+
+      saveAs(blob, "Can you Find It.mp4");
     };
     mediaRecorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
@@ -147,6 +150,7 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
     setTimeout(() => {
       mediaRecorder.stop();
+      mediaRecorder.();
     }, time);
   }
 
