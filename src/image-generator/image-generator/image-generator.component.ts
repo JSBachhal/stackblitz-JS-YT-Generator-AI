@@ -83,7 +83,8 @@ export class ImageGeneratorComponent implements AfterViewInit {
 
   startRecording(time = 5000) {
     // this.addText();
-    this.centeredText(this.textOnTop, this.fontSize, "red");
+    this.addTextOnTop(this.textOnTop, this.fontSize, "red");
+    this.addTextOnBottom(this.textOnBottom, this.fontSize, "yellow");
     const mediaRecorder = this.getMdeiaStreeam(time);
     mediaRecorder.start();
 
@@ -130,16 +131,35 @@ export class ImageGeneratorComponent implements AfterViewInit {
     }
   }
 
-  centeredText(string: string, fontSize: number = this.fontSize, color: string) {
+  addTextOnTop(string: string, fontSize: number = this.fontSize, color: string) {
     const ctx = this.getContext();
     if (!ctx) { return }
     ctx.fillStyle = "RGBA(0, 0, 0, 1)";
-    ctx.fillRect(0, 25 - (fontSize * 1.5) / 2, this.canvasWidth, (fontSize * 1.5));
+    
     ctx.font = fontSize.toString() + "px monospace";
-    ctx.fillStyle = color;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
 
+    ctx.fillRect(0, 25 - (fontSize * 1.5) / 2, this.canvasWidth, (fontSize * 1.5));
+    ctx.fillStyle = color;
     ctx.fillText(string, this.getCanvas().width / 2, 25);
+    
+    ctx.fillRect(0,  this.canvasHeight -(fontSize * 1.5), this.canvasWidth, (fontSize * 1.5));
+  }
+
+  addTextOnBottom(string: string, fontSize: number = this.fontSize, color: string) {
+    const ctx = this.getContext();
+    if (!ctx) { return }
+    ctx.fillStyle = "RGBA(0, 0, 0, 1)";
+    
+    ctx.font = fontSize.toString() + "px monospace";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+
+
+    ctx.fillRect(0,  this.canvasHeight -(fontSize * 1.5), this.canvasWidth, (fontSize * 1.5));
+    ctx.fillStyle = color;
+    ctx.fillText(string, this.canvasHeight -(fontSize * 1.5) / 2, 25);
+    
   }
 }
